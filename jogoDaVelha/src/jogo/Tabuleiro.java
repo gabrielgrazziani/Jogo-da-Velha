@@ -6,8 +6,15 @@ public class Tabuleiro {
 	public int[][] getTabuleiro() {
 		return tabuleiro;
 	}
+	public Tabuleiro() {
+		zerarTabuleiro();
+		this.jogadorDaVez = 1;
+	}
 	public int getJogadorDaVez() {
 		return jogadorDaVez;
+	}
+	public void setJogadorDaVez(int jogador){
+		this.jogadorDaVez = jogador;
 	}
 	public void zerarTabuleiro() {
 		for (int y = 0; y < tabuleiro.length; y++) {
