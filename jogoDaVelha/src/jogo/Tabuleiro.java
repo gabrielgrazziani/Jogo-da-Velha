@@ -1,5 +1,8 @@
 package jogo;
 
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
+
 public class Tabuleiro {
 	private int[][] tabuleiro = new int[3][3];
 	private int jogadorDaVez;
@@ -9,6 +12,7 @@ public class Tabuleiro {
 	public Tabuleiro() {
 		zerarTabuleiro();
 		this.jogadorDaVez = 1;
+		
 	}
 	public int getJogadorDaVez() {
 		return jogadorDaVez;
@@ -24,6 +28,7 @@ public class Tabuleiro {
 		}
 	}
 	public void trocarJogador() {
+		//setJogadorDaVez(jogador);
 		if(this.jogadorDaVez == 2) {
 			this.jogadorDaVez = 0;
 		}
