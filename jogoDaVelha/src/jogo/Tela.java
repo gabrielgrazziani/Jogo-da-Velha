@@ -6,9 +6,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -23,8 +20,9 @@ public class Tela extends JFrame{
 	Botao btnMatriz[][] = new Botao[3][3];
 	
 	public Tela() {
-		arumarTela();
 		arumarJanela();
+		arumarTela();
+		setVisible(true);
 	}
 
 	public void arumarJanela() {
@@ -121,6 +119,8 @@ public class Tela extends JFrame{
 	}
 	
 	public void arumarTela() {
+		add(BorderLayout.NORTH,texto);
+		add(BorderLayout.CENTER,painel);
 		painel.setBackground(Color.black);
 		texto.setFont(new Font("Arial",Font.BOLD,35));
 		texto.setForeground(Color.green);
@@ -134,11 +134,9 @@ public class Tela extends JFrame{
 						joga(btn.getX(), btn.getY());
 					}
 				});
-				this.btnMatriz[y][x] = btn;
+				btnMatriz[y][x] = btn;
 				painel.add(btn);
 			}
 		}
-		add(BorderLayout.NORTH,texto);
-		add(BorderLayout.CENTER,painel);
 	}
 }
