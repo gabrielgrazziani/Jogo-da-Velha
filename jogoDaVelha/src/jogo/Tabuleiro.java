@@ -15,10 +15,20 @@ public class Tabuleiro {
 		
 	}
 	public int getJogadorDaVez() {
-		return jogadorDaVez;
+		if(this.jogadorDaVez == 1) {
+			return 1;
+		}
+		else {
+			return -1;
+		}
 	}
 	public void setJogadorDaVez(int jogador){
-		this.jogadorDaVez = jogador;
+		if(jogador == 1) {
+			this.jogadorDaVez = 1;
+		}
+		else if(jogador == 2) {
+			this.jogadorDaVez = -1;
+		}
 	}
 	public void zerarTabuleiro() {
 		for (int y = 0; y < tabuleiro.length; y++) {
@@ -29,10 +39,12 @@ public class Tabuleiro {
 	}
 	public void trocarJogador() {
 		//setJogadorDaVez(jogador);
-		if(this.jogadorDaVez == 2) {
-			this.jogadorDaVez = 0;
-		}
-		this.jogadorDaVez++;
+		if(this.jogadorDaVez == -1) {
+			this.jogadorDaVez = 1;
+		} 
+		else {
+			this.jogadorDaVez = -1;
+		}	
 	}
 	public boolean jogar(int x,int y) {
 		if(this.tabuleiro[y][x] == 0) {
@@ -43,9 +55,9 @@ public class Tabuleiro {
 	}
 	public boolean horisontal(int jogador){
 		for (int y = 0; y < tabuleiro.length; y++) {
-			if(this.tabuleiro[y][0] == jogador 
-					&& this.tabuleiro[y][1] == jogador
-					&& this.tabuleiro[y][2] == jogador) {
+			if(this.tabuleiro[y][0] + 
+					this.tabuleiro[y][1] +
+					this.tabuleiro[y][2] == 3*jogador) {
 				return true;
 			}
 		}
@@ -53,23 +65,23 @@ public class Tabuleiro {
 	}
 	public boolean vertical(int jogador){ 
 		for (int x = 0; x < tabuleiro.length; x++) {
-			if(this.tabuleiro[0][x] == jogador 
-					&& this.tabuleiro[1][x] == jogador
-					&& this.tabuleiro[2][x] == jogador) {
+			if(this.tabuleiro[0][x] + 
+					this.tabuleiro[1][x] +
+					this.tabuleiro[2][x] == 3*jogador) {
 				return true;
 			}
 		}
 		return false;
 	}
 	public boolean diagonal(int jogador){
-		if(this.tabuleiro[0][0] == jogador 
-				&& this.tabuleiro[1][1] == jogador
-				&& this.tabuleiro[2][2] == jogador) {
+		if(this.tabuleiro[0][0] + 
+				this.tabuleiro[1][1] +
+				this.tabuleiro[2][2] == 3*jogador) {
 			return true;
 		}
-		if(this.tabuleiro[0][2] == jogador 
-				&& this.tabuleiro[1][1] == jogador
-				&& this.tabuleiro[2][0] == jogador) {
+		if(this.tabuleiro[0][2] + 
+				this.tabuleiro[1][1] +
+				this.tabuleiro[2][0] == 3*jogador) {
 			return true;
 		}
 		return false;
