@@ -36,16 +36,15 @@ public class Tela2 extends JFrame{
 	public void limparTela(){
 		tabuleiro.zerarTabuleiro();
 		limpar();
-		tabuleiro.setJogadorDaVez(2);
+		tabuleiro.setJogadorDaVez(-1);
 		trocar();
 	}
 	
 	public void joga(int x,int y){
-		int jogador = tabuleiro.getJogadorDaVez();
 		jogaJogador(x,y);
-		if(!verificarVenceu(jogador)) {
+		if(!verificarVenceu(tabuleiro.getJogadorDaVez())) {
 			jogaMaquina();
-			verificarVenceu(jogador);
+			verificarVenceu(tabuleiro.getJogadorDaVez());
 		}
 	}
 	
@@ -73,7 +72,7 @@ public class Tela2 extends JFrame{
 				else {
 					letra = 'O';
 				}
-				mensagem = "Jogador " + jogador + " (" + letra +") Venceu!";
+				mensagem = "Jogador " + tabuleiro.getNumeroFantasia() + " (" + letra +") Venceu!";
 			}
 			else {
 				mensagem = "O jogo deu velha!";
@@ -92,9 +91,8 @@ public class Tela2 extends JFrame{
 	}
 	
 	private void trocar(){
-			int[][] mat = tabuleiro.getTabuleiro();
 			tabuleiro.trocarJogador();
-			String fraze = "jogador " + tabuleiro.getJogadorDaVez() + " ";
+			String fraze = "jogador " + tabuleiro.getNumeroFantasia() + " ";
 			if(tabuleiro.getJogadorDaVez() == 1) {
 				texto.setForeground(Color.green);
 				fraze += "(X)";
@@ -105,18 +103,7 @@ public class Tela2 extends JFrame{
 			}
 			texto.setText(fraze);
 		}
-	private void colocarSimbolo(int x,int y){
-		char[][] mat = tabuleiro.XO();
-		if(tabuleiro.getJogadorDaVez() == 2) {
-			btnMatriz[y][x].setForeground(Color.green);
-		}
-		else {
-			btnMatriz[y][x].setForeground(Color.red);
-		}
-		btnMatriz[y][x].setText("" + mat[y][x]);
-	}
 	public void atualizar(){
-		int jogador = tabuleiro.getJogadorDaVez();
 		char[][] mat = tabuleiro.XO();
 		for (int x = 0; x < this.btnMatriz.length; x++) {
 			for (int y = 0; y < btnMatriz.length; y++) {
@@ -157,8 +144,7 @@ public class Tela2 extends JFrame{
 				btn.addActionListener(new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent e){
-						joga(btn.getX(), btn.getY());
-						
+						joga(btn.getX(), btn.getY());				
 					}
 				});
 				btnMatriz[y][x] = btn;

@@ -9,26 +9,24 @@ public class Tabuleiro {
 	public int[][] getTabuleiro() {
 		return tabuleiro;
 	}
+	public int getNumeroFantasia() { // retoena o numero do jogador com 1 para 1 e -1 para 2
+		if(this.jogadorDaVez == -1) {
+			return 2;
+		}
+		return 1;
+	}
+	public void setTabuleiro(int[][] tabuleiro) {
+		this.tabuleiro = tabuleiro;
+	}
 	public Tabuleiro() {
 		zerarTabuleiro();
-		this.jogadorDaVez = 1;
-		
+		this.jogadorDaVez = 1;	
 	}
 	public int getJogadorDaVez() {
-		if(this.jogadorDaVez == 1) {
-			return 1;
-		}
-		else {
-			return -1;
-		}
+		return this.jogadorDaVez;
 	}
 	public void setJogadorDaVez(int jogador){
-		if(jogador == 1) {
-			this.jogadorDaVez = 1;
-		}
-		else if(jogador == 2) {
-			this.jogadorDaVez = -1;
-		}
+		this.jogadorDaVez = jogador;
 	}
 	public void zerarTabuleiro() {
 		for (int y = 0; y < tabuleiro.length; y++) {
@@ -38,7 +36,6 @@ public class Tabuleiro {
 		}
 	}
 	public void trocarJogador() {
-		//setJogadorDaVez(jogador);
 		if(this.jogadorDaVez == -1) {
 			this.jogadorDaVez = 1;
 		} 
@@ -87,7 +84,7 @@ public class Tabuleiro {
 		return false;
 	}
 	public boolean velha() {
-		if(verificar(1) || verificar(2)) {
+		if(verificar(1) || verificar(-1)) {
 			return false;
 		}
 		for (int y = 0; y < tabuleiro.length; y++) {

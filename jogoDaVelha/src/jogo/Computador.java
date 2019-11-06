@@ -2,43 +2,84 @@ package jogo;
 
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 public class Computador {
 	private Tabuleiro tabuleiro;
 	private int[][] tab;
 	private int maquina;
 	private int oponente;
-	private int x;
-	private int y;
-	public boolean jogar(int x,int y) {
-		if(tabuleiro.jogar(x, y)) {
-			this.x = x;
-			this.y = y;
-			return true;
-		}
-		return false;
-	}
 	public boolean jogarMaquina(Tabuleiro x) {
 		arumar(x);
-	 	return jogadaObivia() || lateral() || aleatotio();
+		boolean ok = false;
+		if(jogadaObivia()) {
+			ok = true;
+		}
+		else if (contraMedida()){
+			ok = true;
+		}
+		else if (lateral()){
+			ok = true;
+		}
+		else if(aleatotio()) {
+			ok = true;
+		}
+	 	return ok;
 	}
-
+	
 	private void arumar(Tabuleiro tab){
 		this.maquina = tab.getJogadorDaVez();
-		if(this.maquina == 2) {
+		if(this.maquina == -1) {
 			this.oponente = 1;
-			this.maquina = -1;
 		}
 		else {
 			this.oponente = -1;
-			this.maquina = 1;
 		}
 		this.tab = tab.getTabuleiro();
 		this.tabuleiro = tab;
 	}
 	private boolean jogadaObivia() {
-		
-		return horisontal(maquina) || vertical(maquina) || diagonal(maquina)
-				|| horisontal(oponente) || vertical(oponente) || diagonal(oponente);
+		boolean ok = false;
+		if(horisontal(maquina) || vertical(maquina) || diagonal(maquina)) {
+			ok = true;
+		}
+		else if( horisontal(oponente) || vertical(oponente) || diagonal(oponente)) {
+			ok = true;
+		}
+		return ok;
+	}
+	private boolean contraMedida() {
+		int jogador = tabuleiro.getJogadorDaVez();
+		if(lateralMarcada(jogador*-1) && !lateralMarcada(jogador)) {
+			if(tab[1][1] == 0) {
+				return tabuleiro.jogar(1, 1);
+			}
+		}
+		else if (tab[1][1] == jogador){
+			if(tab[0][1] == 0) {
+				return tabuleiro.jogar(1,0);
+			}
+			else if (tab[1][0] == 0) {
+				return tabuleiro.jogar(0,1);
+			}
+			else if (tab[2][1] == 0) {
+				return tabuleiro.jogar(1,2);			
+			}
+			else if (tab[1][2] == 0) {
+				return tabuleiro.jogar(2,1);
+			}
+		}
+		return false;
+	}
+	
+	private boolean lateralMarcada(int jogador) {
+		if(tab[0][0] + 
+				tab[2][0] +
+				tab[0][2] +
+				tab[1][2]== 1*jogador) {
+			return true;
+		}
+		return false;
 	}
 	private boolean horisontal(int jogador){
 		for (int y = 0; y < tab.length; y++) {
@@ -53,29 +94,36 @@ public class Computador {
 		return false;
 	}
 	private boolean lateral(){
-		for (int i = 0; i < 2;i += 2) {
-			for (int j = 0; j < 2; j += 2) {
-				if(tab[i][j] == maquina) {
-					if(tab[j][i] == 0) {
-						return tabuleiro.jogar(j, i);
+		for (int x = 0; x < 3;x += 2) {
+			for (int y = 0; y < 3; y += 2) {
+				if(tab[y][x] == maquina) {
+					if(tab[oposto(y)][oposto(x)] == 0) {
+						return tabuleiro.jogar(oposto(x), oposto(y));
 					}
-					else if(tab[i][i] == 0) {
-						return tabuleiro.jogar(i, i);
+					else if(tab[y][oposto(x)] == 0) {
+						return tabuleiro.jogar(oposto(x), y);
 					}
 					else {
-						return tabuleiro.jogar(j, j);
+						return tabuleiro.jogar(x, oposto(y));
 					}
 				}
 			}
 		}
-		for (int i = 0; i < 2;i += 2) {
-			for (int j = 0; j < 2; j += 2) {
-				if(tab[i][j] == 0) {
-					return tabuleiro.jogar(i, j);
+		for (int x = 0; x < 3;x += 2) {
+			for (int y = 0; y < 3; y += 2) {
+				if(tab[y][x] == 0) {
+					return tabuleiro.jogar(x, y);
 				}
 			}
 		}
 		return false;
+	}
+	private int oposto(int x){
+		x += 2;
+		if(x > 2) {
+			x = 0;
+		}
+		return x;
 	}
 	private boolean aleatotio(){
 		Random gerador = new Random();
@@ -86,7 +134,7 @@ public class Computador {
 		do {
 			do {
 				if(tab[y][x] == 0) {
-					return tabuleiro.jogar(y, x);
+					return tabuleiro.jogar(x, y);
 				}
 				y++;
 				if(y >= 3) {
@@ -127,21 +175,14 @@ public class Computador {
 		if(tab[0][2] + 
 				tab[1][1] +
 				tab[2][0] == 2*jogador) {
-			for (int i = 0; i < 3; i++) {
-				for (int j = 2; j >= 0; j--) {
-					if(tab[i][j] == 0) {
-						return tabuleiro.jogar(j, i);
-					}
+			int y = 0;
+			for (int x = 2; x >= 0; x--) {
+				if(tab[y][x] == 0) {
+					return tabuleiro.jogar(x, y);
 				}
+				y++;
 			}
 		}
 		return false;
-	}
-	public int getX() {
-		return x;
-	}
-	public int getY() {
-		return y;
-	}
-	
+	}	
 }
