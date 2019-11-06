@@ -9,7 +9,7 @@ public class Computador {
 	private int[][] tab;
 	private int maquina;
 	private int oponente;
-	public boolean jogarMaquina(Tabuleiro x) {
+	public boolean jogarMaquina(Tabuleiro x,int modo) {
 		arumar(x);
 		boolean ok = false;
 		if(jogadaObivia()) {

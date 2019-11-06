@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Random;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -16,15 +18,28 @@ public class Tela extends JFrame{
 	
 	Tabuleiro tabuleiro = new Tabuleiro();
 	JPanel painel = new JPanel(new GridLayout(3,3,10,10));
-	JLabel texto = new JLabel("jogador " + tabuleiro.getJogadorDaVez() + "° (X)");
+	JLabel texto = new JLabel("jogador (X)");
 	Botao btnMatriz[][] = new Botao[3][3];
+	static JFrame tela;
+	private int modo = 0;
 	
-	public Tela() {
+	public void setModo(int modo) {
+		this.modo = modo;
+	}
+
+	public Tela(int modo) {
 		arumarJanela();
 		arumarTela();
 		setVisible(true);
+		this.modo = modo;
+		Random gerador = new Random();
+		int x = gerador.nextInt(2);
+		if(modo != 0 && 1 == x) {
+			jogaMaquina(modo);
+			verificarVenceu(tabuleiro.getJogadorDaVez());
+		}
 	}
-
+	
 	public void arumarJanela() {
 		setTitle("jogo da velha");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -35,19 +50,46 @@ public class Tela extends JFrame{
 	public void limparTela(){
 		tabuleiro.zerarTabuleiro();
 		limpar();
-		tabuleiro.setJogadorDaVez(1);
+		//tabuleiro.setJogadorDaVez(-1);
 		trocar();
 	}
 	
 	public void joga(int x,int y){
-		int jogador = tabuleiro.getJogadorDaVez();
-		if(tabuleiro.jogar(x, y)) {		// joga e ja verifica se a jogada ocorreu
-			colocarSimbolo(x,y);
-			verificarVenceu(jogador);
-			trocar();
-		}	
+		if(modo == 0) {
+			jogandorContraJogador(x, y);
+		}
+		else {
+			jogandorContraMaquina(x, y, this.modo);
+		}
 	}
-	private void verificarVenceu(int jogador){
+	
+	public void jogandorContraJogador(int x,int y) {
+		jogaJogador(x,y);
+		verificarVenceu(tabuleiro.getJogadorDaVez());
+	}
+	
+	public void jogandorContraMaquina(int x,int y,int modo) {
+		jogaJogador(x,y);
+		if(!verificarVenceu(tabuleiro.getJogadorDaVez())) {
+			jogaMaquina(modo);
+			verificarVenceu(tabuleiro.getJogadorDaVez());
+		}
+	}
+	
+	public boolean jogaJogador(int x,int y){
+		if(tabuleiro.jogar(x, y)) {		// joga e ja verifica se a jogada ocorreu
+			atualizar();
+			return true;
+		}
+		return false;
+	}
+	public void jogaMaquina(int modo) {
+		Computador com = new Computador();
+		if(com.jogarMaquina(tabuleiro,modo)) {		// joga e ja verifica se a jogada ocorreu
+			atualizar();
+		}
+	}
+	private boolean verificarVenceu(int jogador){
 		if(tabuleiro.verificar(jogador) || tabuleiro.velha()) {
 			String mensagem;
 			if(tabuleiro.verificar(jogador)) {
@@ -58,7 +100,7 @@ public class Tela extends JFrame{
 				else {
 					letra = 'O';
 				}
-				mensagem = "Jogador " + jogador + " (" + letra +") Venceu!";
+				mensagem = "Jogador (" + letra +") Venceu!";
 			}
 			else {
 				mensagem = "O jogo deu velha!";
@@ -66,17 +108,24 @@ public class Tela extends JFrame{
 			int opcao = JOptionPane.showConfirmDialog(null,mensagem + "\n\nJogar Novamente", "", JOptionPane.YES_NO_OPTION);
 			if(opcao == 0) {
 				limparTela();
+				if(modo != 0 && tabuleiro.getJogadorDaVez() == -1) {
+					jogaMaquina(modo);
+					verificarVenceu(tabuleiro.getJogadorDaVez());
+				}
+				return true;
 			}
 			else {
-				System.exit(0);
+				tela.setVisible(false);
+				Menu.main(null);
 			}
-		}	
+		}
+		trocar();
+		return false;
 	}
 	
 	private void trocar(){
-			int[][] mat = tabuleiro.getTabuleiro();
 			tabuleiro.trocarJogador();
-			String fraze = "jogador " + tabuleiro.getJogadorDaVez() + " ";
+			String fraze = "jogador ";
 			if(tabuleiro.getJogadorDaVez() == 1) {
 				texto.setForeground(Color.green);
 				fraze += "(X)";
@@ -87,23 +136,20 @@ public class Tela extends JFrame{
 			}
 			texto.setText(fraze);
 		}
-	private void colocarSimbolo(int x,int y){
-		char[][] mat = tabuleiro.XO();
-		if(tabuleiro.getJogadorDaVez() == 1) {
-			btnMatriz[y][x].setForeground(Color.green);
-		}
-		else {
-			btnMatriz[y][x].setForeground(Color.red);
-		}
-		btnMatriz[y][x].setText("" + mat[y][x]);
-	}
 	public void atualizar(){
-		int[][] mat = tabuleiro.getTabuleiro();
+		char[][] mat = tabuleiro.XO();
 		for (int x = 0; x < this.btnMatriz.length; x++) {
 			for (int y = 0; y < btnMatriz.length; y++) {
 				btnMatriz[y][x].setText("" + mat[y][x]);
+				if(mat[y][x] == 'X') {
+					btnMatriz[y][x].setForeground(Color.green);
+				}
+				else {
+					btnMatriz[y][x].setForeground(Color.red);
+				}
 			}
 		}
+		//return verificarVenceu(jogador);
 	}
 	
 	public void limpar(){
@@ -115,7 +161,8 @@ public class Tela extends JFrame{
 	}
 	
 	public static void main(String[] args) {
-		Tela tela = new Tela();
+		int x = Integer.parseInt(args[0]);
+		tela = new Tela(x);
 	}
 	
 	public void arumarTela() {
@@ -131,7 +178,7 @@ public class Tela extends JFrame{
 				btn.addActionListener(new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent e){
-						joga(btn.getX(), btn.getY());
+						joga(btn.getX(), btn.getY());				
 					}
 				});
 				btnMatriz[y][x] = btn;
