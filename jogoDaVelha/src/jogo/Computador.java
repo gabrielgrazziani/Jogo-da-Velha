@@ -12,19 +12,22 @@ public class Computador {
 	public boolean jogarMaquina(Tabuleiro x,int modo) {
 		arumar(x);
 		boolean ok = false;
-		if(jogadaObivia()) {
+		if(modo >= 1 && jogadaObivia() ) {
 			ok = true;
 		}
-		else if (contraMedida()){
+		else if (modo >= 3 && contraMedida()){
 			ok = true;
 		}
-		else if (lateral()){
+		else if (modo >= 2 && lateral()){
 			ok = true;
 		}
-		else if(aleatotio()) {
+		else if(modo >= 1 && aleatotio()) {
 			ok = true;
 		}
 	 	return ok;
+	}
+	public static void main(String[] args) {
+		new Tela(3);
 	}
 	
 	private void arumar(Tabuleiro tab){
@@ -50,7 +53,7 @@ public class Computador {
 	}
 	private boolean contraMedida() {
 		int jogador = tabuleiro.getJogadorDaVez();
-		if(lateralMarcada(jogador*-1) && !lateralMarcada(jogador)) {
+		if(lateralMarcada(jogador*-1) && !lateralMarcada(jogador) && !(tab[1][1] == jogador)) {
 			if(tab[1][1] == 0) {
 				return tabuleiro.jogar(1, 1);
 			}
