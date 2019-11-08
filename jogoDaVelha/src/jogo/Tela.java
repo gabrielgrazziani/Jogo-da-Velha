@@ -35,7 +35,7 @@ public class Tela extends JFrame{
 		this.modo = modo;
 		Random gerador = new Random();
 		int x = gerador.nextInt(2);
-		if(modo != 0 && 1 == 1) {
+		if(modo != 0 && 1 == x) {
 			this.jogadorComecou = -1;
 			trocar(-1);
 			jogaMaquina(modo);
