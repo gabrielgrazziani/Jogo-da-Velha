@@ -1,8 +1,6 @@
 package jogo;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -14,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
 import java.awt.Color;
-import java.awt.SystemColor;
 
 public class Menu extends JFrame {
 
@@ -48,9 +45,8 @@ public class Menu extends JFrame {
 	 * Create the frame.
 	 */
 	public Menu() {
-		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 193, 281);
+		setBounds(100, 100, 283, 430);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -68,7 +64,7 @@ public class Menu extends JFrame {
 				jogo(0);
 			}
 		});
-		button.setBackground(Color.GRAY);
+		button.setBackground(Color.LIGHT_GRAY);
 		contentPane.add(button);
 		
 		JLabel label_1 = new JLabel("Contra a Maquina");
@@ -97,9 +93,18 @@ public class Menu extends JFrame {
 		JButton button_3 = new JButton("Imposs\u00EDvel");
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				jogo(4);
+			}
+		});
+		
+		JButton btnDificil = new JButton("Dificil");
+		btnDificil.setBackground(Color.ORANGE);
+		btnDificil.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				jogo(3);
 			}
 		});
+		contentPane.add(btnDificil);
 		button_3.setBackground(Color.RED);
 		contentPane.add(button_3);
 	}

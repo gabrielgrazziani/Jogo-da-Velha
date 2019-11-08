@@ -12,13 +12,13 @@ public class Computador {
 	public boolean jogarMaquina(Tabuleiro x,int modo) {
 		arumar(x);
 		boolean ok = false;
-		if(modo >= 1 && jogadaObivia() ) {
+		if(modo >= 2 && jogadaObivia() ) {
 			ok = true;
 		}
-		else if (modo >= 3 && contraMedida()){
+		else if (modo >= 4 && contraMedida()){
 			ok = true;
 		}
-		else if (modo >= 2 && lateral()){
+		else if (modo >= 3 && lateral()){
 			ok = true;
 		}
 		else if(modo >= 1 && aleatotio()) {

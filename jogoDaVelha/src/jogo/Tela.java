@@ -21,6 +21,7 @@ public class Tela extends JFrame{
 	JLabel texto = new JLabel("jogador (X)");
 	Botao btnMatriz[][] = new Botao[3][3];
 	static JFrame tela;
+	int jogadorComecou = 1;
 	private int modo = 0;
 	
 	public void setModo(int modo) {
@@ -34,9 +35,11 @@ public class Tela extends JFrame{
 		this.modo = modo;
 		Random gerador = new Random();
 		int x = gerador.nextInt(2);
-		if(modo != 0 && 1 == x) {
+		if(modo != 0 && 1 == 1) {
+			this.jogadorComecou = -1;
+			trocar(-1);
 			jogaMaquina(modo);
-			verificarVenceu(tabuleiro.getJogadorDaVez());
+			trocar(1);
 		}
 	}
 	
@@ -50,30 +53,44 @@ public class Tela extends JFrame{
 	public void limparTela(){
 		tabuleiro.zerarTabuleiro();
 		limpar();
-		//tabuleiro.setJogadorDaVez(-1);
-		trocar();
+		if(this.jogadorComecou == tabuleiro.getJogadorDaVez()) {
+			trocar(-1 * tabuleiro.getJogadorDaVez());
+		}
+		else {
+			trocar(0);
+		}
+		this.jogadorComecou = tabuleiro.getJogadorDaVez();
 	}
 	
 	public void joga(int x,int y){
+		boolean ok = false;
 		if(modo == 0) {
-			jogandorContraJogador(x, y);
+			ok = jogandorContraJogador(x, y);
 		}
 		else {
-			jogandorContraMaquina(x, y, this.modo);
+			ok = jogandorContraMaquina(x, y, this.modo);
 		}
 	}
 	
-	public void jogandorContraJogador(int x,int y) {
-		jogaJogador(x,y);
-		verificarVenceu(tabuleiro.getJogadorDaVez());
+	public Boolean jogandorContraJogador(int x,int y) {
+		boolean ok = jogaJogador(x,y);
+		if(ok && !(verificarVenceu(tabuleiro.getJogadorDaVez()))) {
+			trocar(0);
+		}
+		return ok;
 	}
 	
-	public void jogandorContraMaquina(int x,int y,int modo) {
-		jogaJogador(x,y);
-		if(!verificarVenceu(tabuleiro.getJogadorDaVez())) {
-			jogaMaquina(modo);
-			verificarVenceu(tabuleiro.getJogadorDaVez());
+	public boolean jogandorContraMaquina(int x,int y,int modo) {
+		boolean ok = jogaJogador(x,y);
+		if(!verificarVenceu(tabuleiro.getJogadorDaVez()) && ok) {
+			trocar(0);
+			ok = jogaMaquina(modo);
+			if(!verificarVenceu(tabuleiro.getJogadorDaVez()) && ok) {
+				trocar(0);
+			}
+			return true;
 		}
+		return false;
 	}
 	
 	public boolean jogaJogador(int x,int y){
@@ -83,11 +100,13 @@ public class Tela extends JFrame{
 		}
 		return false;
 	}
-	public void jogaMaquina(int modo) {
+	public boolean jogaMaquina(int modo) {
 		Computador com = new Computador();
 		if(com.jogarMaquina(tabuleiro,modo)) {		// joga e ja verifica se a jogada ocorreu
 			atualizar();
+			return true;
 		}
+		return false;
 	}
 	private boolean verificarVenceu(int jogador){
 		if(tabuleiro.verificar(jogador) || tabuleiro.velha()) {
@@ -110,7 +129,7 @@ public class Tela extends JFrame{
 				limparTela();
 				if(modo != 0 && tabuleiro.getJogadorDaVez() == -1) {
 					jogaMaquina(modo);
-					verificarVenceu(tabuleiro.getJogadorDaVez());
+					trocar(0);
 				}
 				return true;
 			}
@@ -119,12 +138,17 @@ public class Tela extends JFrame{
 				Menu.main(null);
 			}
 		}
-		trocar();
+
 		return false;
 	}
 	
-	private void trocar(){
-			tabuleiro.trocarJogador();
+	private void trocar(int t){
+			if(t == 0) {
+				tabuleiro.trocarJogador();
+			}
+			else {
+				tabuleiro.setJogadorDaVez(t);
+			}
 			String fraze = "jogador ";
 			if(tabuleiro.getJogadorDaVez() == 1) {
 				texto.setForeground(Color.green);
