@@ -1,8 +1,5 @@
 package jogo;
 
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
-
 public class Tabuleiro {
 	private int[][] tabuleiro = new int[3][3];
 	private int jogadorDaVez;

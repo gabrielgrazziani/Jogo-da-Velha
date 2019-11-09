@@ -20,8 +20,7 @@ public class Menu extends JFrame {
 	
 	private void jogo(int modo) {
 		frame.setVisible(false);
-		String[] x = {"" + modo}; 
-		Tela.main(x);
+		new Tela2(modo);
 	}
 
 	/**
