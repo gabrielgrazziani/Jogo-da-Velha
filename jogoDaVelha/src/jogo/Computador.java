@@ -2,8 +2,6 @@ package jogo;
 
 import java.util.Random;
 
-import javax.swing.JOptionPane;
-
 public class Computador {
 	private Tabuleiro tabuleiro;
 	private int[][] tab;
@@ -25,9 +23,6 @@ public class Computador {
 			ok = true;
 		}
 	 	return ok;
-	}
-	public static void main(String[] args) {
-		new Tela(3);
 	}
 	
 	private void arumar(Tabuleiro tab){

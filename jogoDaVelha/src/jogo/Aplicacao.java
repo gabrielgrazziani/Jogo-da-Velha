@@ -6,8 +6,9 @@ import javax.swing.JOptionPane;
 
 
 public class Aplicacao {
-	Tabuleiro tabuleiro = new Tabuleiro();
+	private Tabuleiro tabuleiro = new Tabuleiro();
 	private int jogadorComecou = 1;
+	private int modo = 0;
 	
 	public int getModo() {
 		return modo;
@@ -17,11 +18,13 @@ public class Aplicacao {
 		return tabuleiro.getJogadorDaVez();
 	}
 
-	private int modo = 0;
+	
 	
 	public void setModo(int modo) {
 		this.modo = modo;
+		reiniciar();
 	}
+	
 
 	public Aplicacao(int modo) {
 		this.modo = modo;
@@ -38,7 +41,7 @@ public class Aplicacao {
 		return "" + tabuleiro.XO()[y][x];
 	}
 	
-	public void zerarTabuleiro(){
+	private void zerarTabuleiro(){
 		tabuleiro.zerarTabuleiro();
 		if(this.jogadorComecou == tabuleiro.getJogadorDaVez()) {
 			trocar(-1 * tabuleiro.getJogadorDaVez());
@@ -47,20 +50,19 @@ public class Aplicacao {
 			trocar(0);
 		}
 		this.jogadorComecou = tabuleiro.getJogadorDaVez();
-		Tela2.atualizar();
+		Tela.atualizar();
 	}
 	
 	public void joga(int x,int y){
-		boolean ok = false;
 		if(modo == 0) {
-			ok = jogandorContraJogador(x, y);
+			jogandorContraJogador(x, y);
 		}
 		else {
-			ok = jogandorContraMaquina(x, y, this.modo);
+			jogandorContraMaquina(x, y, this.modo);
 		}
 	}
 	
-	public Boolean jogandorContraJogador(int x,int y) {
+	private Boolean jogandorContraJogador(int x,int y) {
 		boolean ok = jogaJogador(x,y);
 		if(ok && !(verificarVenceu(tabuleiro.getJogadorDaVez()))) {
 			trocar(0);
@@ -68,7 +70,7 @@ public class Aplicacao {
 		return ok;
 	}
 	
-	public boolean jogandorContraMaquina(int x,int y,int modo) {
+	private boolean jogandorContraMaquina(int x,int y,int modo) {
 		boolean ok = jogaJogador(x,y);
 		if(!verificarVenceu(tabuleiro.getJogadorDaVez()) && ok) {
 			trocar(0);
@@ -81,13 +83,13 @@ public class Aplicacao {
 		return false;
 	}
 	
-	public boolean jogaJogador(int x,int y){
+	private boolean jogaJogador(int x,int y){
 		if(tabuleiro.jogar(x, y)) {		// joga e ja verifica se a jogada ocorreu
 			return true;
 		}
 		return false;
 	}
-	public boolean jogaMaquina(int modo) {
+	private boolean jogaMaquina(int modo) {
 		Computador com = new Computador();
 		if(com.jogarMaquina(tabuleiro,modo)) {		// joga e ja verifica se a jogada ocorreu
 			return true;
@@ -110,16 +112,14 @@ public class Aplicacao {
 			else {
 				mensagem = "O jogo deu velha!";
 			}
-			Tela2.atualizar();
+			Tela.atualizar();
 			int opcao = JOptionPane.showConfirmDialog(null,mensagem + "\n\nJogar Novamente", "", JOptionPane.YES_NO_OPTION);
 			if(opcao == 0) {
 				reiniciar();
 				return true;
 			}
 			else {
-				zerarTabuleiro();
-				Tela2.menu();
-				//Menu.main(null);
+				System.exit(0);
 			}
 		}
 		return false;
@@ -130,10 +130,10 @@ public class Aplicacao {
 			jogaMaquina(modo);
 			trocar(0);
 		}
-		Tela2.atualizar();
+		Tela.atualizar();
 	}
 	
-	public void trocar(int t){
+	private void trocar(int t){
 			if(t == 0) {
 				tabuleiro.trocarJogador();
 			}

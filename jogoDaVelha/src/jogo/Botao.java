@@ -6,26 +6,21 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
 public class Botao extends JButton{
-	private int X;
-	private int Y;
-	public Botao(int x,int y){
-		this.setX(x);
-		this.setY(y);
+	public Botao(){
 		setBackground(Color.white);
 		setText(null);
 		setFont(new Font("Arial",Font.BOLD,100));
 		setHorizontalAlignment(SwingConstants.CENTER);
 	}
-	public int getX() {
-		return X;
-	}
-	public void setX(int X) {
-		this.X = X;
-	}
-	public int getY() {
-		return Y;
-	}
-	public void setY(int Y) {
-		this.Y = Y;
+	
+	@Override
+	public void setText(String text) {
+		super.setText(text);
+		if(text != null && text.equals("X")) {
+			setForeground(Color.green);
+		}
+		else {
+			setForeground(Color.red);
+		}
 	}
 }
