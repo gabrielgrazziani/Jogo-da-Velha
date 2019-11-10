@@ -71,10 +71,11 @@ public class Computador {
 	}
 	
 	private boolean lateralMarcada(int jogador) {
-		if(tab[0][0] + 
+		int soma = tab[0][0] + 
 				tab[2][0] +
 				tab[0][2] +
-				tab[1][2]== 1*jogador) {
+				tab[2][2];
+		if(soma == 1*jogador) {
 			return true;
 		}
 		return false;
