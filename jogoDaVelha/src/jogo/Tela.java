@@ -17,6 +17,8 @@ import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 
 public class Tela extends JFrame {
 
@@ -103,6 +105,7 @@ public class Tela extends JFrame {
 	 */
 
 	public Tela() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\gabriel\\git\\jogoDaVelha\\jogoDaVelha\\imagens\\100468.png"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 446, 430);
 		
@@ -138,6 +141,7 @@ public class Tela extends JFrame {
 		});
 		
 		mnMudarModo.add(mntmNewMenuItem_3);
+		mntmNewMenuItem_4.setHorizontalAlignment(SwingConstants.LEFT);
 		mntmNewMenuItem_4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				apli.setModo(4);
