@@ -113,14 +113,9 @@ public class Aplicacao {
 				mensagem = "O jogo deu velha!";
 			}
 			Tela.atualizar();
-			int opcao = JOptionPane.showConfirmDialog(null,mensagem + "\n\nJogar Novamente", "", JOptionPane.YES_NO_OPTION);
-			if(opcao == 0) {
-				reiniciar();
-				return true;
-			}
-			else {
-				System.exit(0);
-			}
+			JOptionPane.showMessageDialog(null, mensagem);
+			reiniciar();
+			return true;
 		}
 		return false;
 	}
